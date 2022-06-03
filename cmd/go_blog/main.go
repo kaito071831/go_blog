@@ -15,9 +15,13 @@ func main() {
 
 	// htmlのディレクトリを指定
 	router.LoadHTMLGlob("templates/**/*")
+	
+	// 静的ファイルの場所を指定
+	router.Static("/static", "static")
 
 	// URIとハンドラを指定
 	router.GET("/", blog_router.TopHandler)
+	router.GET("/article", blog_router.Index)
 
 	// サーバーを起動
 	if err := router.Run(); err != nil {

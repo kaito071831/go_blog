@@ -1,0 +1,12 @@
+{{ define "article/index.html" }}
+<html>
+  <h1>記事一覧</h1>
+  <ul>
+    {{ range .list }}
+      <li>{{- .Id }}</li>
+      <li>{{- .Title}}</li>
+      <li>{{- .Body}}</li>
+    {{ end }}
+  </ul>
+</html>
+{{ end }}
