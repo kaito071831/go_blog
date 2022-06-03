@@ -1,6 +1,7 @@
 package blog_router
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -8,7 +9,7 @@ import (
 )
 
 type Article struct {
-	Id int
+	Id int `gorm:"type:int AUTO_INCREMENT"`
 	Title string
 	Body string
 }
@@ -23,4 +24,17 @@ func Index(c *gin.Context) {
 	c.HTML(http.StatusOK, "article/index.html", gin.H{
 		"list": articlelist,
 	})
+}
+
+func New(c *gin.Context) {
+	c.HTML(http.StatusOK, "article/new.html", nil)
+}
+
+func Create(c *gin.Context) {
+	if err := c.Request.ParseForm(); err != nil {
+		log.Fatalf("フォームの送信に失敗しました: %v", err)
+	}
+	article := Article{Title: c.PostForm("title"), Body: c.PostForm("body")}
+	utility.Db.Create(&article)
+	c.Redirect(http.StatusSeeOther, "/article")
 }

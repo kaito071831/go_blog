@@ -1,0 +1,10 @@
+{{ define "article/new.html" }}
+<html>
+  <h1>記事作成</h1>
+  <form method="post" action="/article/create">
+    <label>Title</label><br/><input type="text" name="title"><br/>
+    <label>Body</label><br/><textarea name="body"></textarea>
+    <input type="submit" value="送信"/>
+  </form>
+</html>
+{{ end }}
