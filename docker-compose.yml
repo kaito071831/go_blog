@@ -31,4 +31,4 @@ services:
       - .env
 
 volumes:
-  go_blog_db_volume:
+  db_volume:
