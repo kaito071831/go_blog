@@ -14,11 +14,8 @@ services:
         target: /usr/src/app
     depends_on:
       - db
-    environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_USER: user
-      MYSQL_PASSWORD: password
-      MYSQL_DATABASE: go_blog
+    env_file:
+      - .env
     command: go run cmd/go_blog/main.go
 
   db:
@@ -30,11 +27,8 @@ services:
       - type: volume
         source: go_blog_db_volume
         target: /var/lib/mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_USER: user
-      MYSQL_PASSWORD: password
-      MYSQL_DATABASE: go_blog
+    env_file:
+      - .env
 
 volumes:
   go_blog_db_volume:
