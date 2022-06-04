@@ -25,7 +25,7 @@ services:
       dockerfile: build/db/Dockerfile
     volumes:
       - type: volume
-        source: go_blog_db_volume
+        source: db_volume
         target: /var/lib/mysql
     env_file:
       - .env
