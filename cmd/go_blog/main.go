@@ -22,11 +22,13 @@ func main() {
 	// URIとハンドラを指定
 	router.GET("/", blog_router.TopHandler)
 
+	
 	article_group := router.Group("/article")
 	article_group.GET("/", blog_router.Index)
 	article_group.GET("/new", blog_router.New)
 	article_group.POST("/create", blog_router.Create)
 	article_group.GET("/:id", blog_router.Show)
+	article_group.GET("/:id/edit", blog_router.Edit)
 
 	// サーバーを起動
 	if err := router.Run(); err != nil {

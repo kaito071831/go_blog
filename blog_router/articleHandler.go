@@ -52,3 +52,11 @@ func Create(c *gin.Context) {
 	utility.Db.Create(&article)
 	c.Redirect(http.StatusSeeOther, "/article")
 }
+
+// 記事編集フォームを表示
+func Edit(c *gin.Context) {
+	article := Article{}
+	id := c.Param("id")
+	utility.Db.First(&article, id)
+	c.HTML(http.StatusOK, "article/edit.html", article)
+}
