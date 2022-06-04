@@ -1,0 +1,10 @@
+{{ define "article/show.html" }}
+<html>
+  <h1>記事詳細</h1>
+  <p>{{ .Title }}</p>
+  <p>{{ .Body }}</p>
+  <p>{{ .CreatedAt }}</p>
+  <p>{{ .UpdatedAt }}</p>
+  <a href="/article">一覧に戻る</a>
+</html>
+{{ end }}

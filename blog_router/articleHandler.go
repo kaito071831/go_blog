@@ -3,6 +3,7 @@ package blog_router
 import (
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/kaito071831/go_blog/utility"
@@ -10,9 +11,11 @@ import (
 
 // 記事の型
 type Article struct {
-	Id int `gorm:"type:int AUTO_INCREMENT"`
-	Title string
-	Body string
+	ID int `gorm:"type:int;autoIncrement;primarykey;<-:false"`
+	Title string `gorm:"type:string;not null;<-"`
+	Body string `gorm:"type:string;<-"`
+	CreatedAt time.Time `gorm:"type:time;<-:create;not null"`
+	UpdatedAt time.Time `gorm:"type:time;<-:update"`
 }
 
 // データベースを自動的にマイグレーションする
@@ -24,9 +27,15 @@ func init(){
 func Index(c *gin.Context) {
 	articlelist := []Article{}
 	utility.Db.Find(&articlelist)
-	c.HTML(http.StatusOK, "article/index.html", gin.H{
-		"list": articlelist,
-	})
+	c.HTML(http.StatusOK, "article/index.html", articlelist)
+}
+
+// 記事の詳細表示
+func Show(c *gin.Context) {
+	article := Article{}
+	id := c.Param("id")
+	utility.Db.First(&article, id)
+	c.HTML(http.StatusOK, "article/show.html", article)
 }
 
 // 記事作成フォームを表示
