@@ -29,7 +29,7 @@ func main() {
 	article_group.POST("/", blog_router.Create)
 	article_group.GET("/:id", blog_router.Show)
 	article_group.GET("/:id/edit", blog_router.Edit)
-	article_group.PUT("/:id", blog_router.Update)
+	article_group.POST("/:id", blog_router.Update)
 
 	// サーバーを起動
 	if err := router.Run(); err != nil {

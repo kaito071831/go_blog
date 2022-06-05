@@ -66,5 +66,9 @@ func Update(c *gin.Context) {
 	if err := c.Request.ParseForm(); err != nil {
 		log.Fatalf("フォームの送信に失敗しました: %v", err)
 	}
-
+	article := Article{}
+	id := c.Param("id")
+	utility.Db.First(&article, id)
+	utility.Db.Model(&article).Updates(Article{Title: c.PostForm("title"), Body: c.PostForm("body")})
+	c.Redirect(http.StatusSeeOther, "/article/" + id)
 }
