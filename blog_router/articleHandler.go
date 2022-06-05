@@ -3,19 +3,17 @@ package blog_router
 import (
 	"log"
 	"net/http"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/kaito071831/go_blog/utility"
+	"gorm.io/gorm"
 )
 
 // 記事の型
 type Article struct {
-	ID int `gorm:"type:int;autoIncrement;primarykey;<-:false"`
+	gorm.Model
 	Title string `gorm:"type:string;not null;<-"`
 	Body string `gorm:"type:string;<-"`
-	CreatedAt time.Time `gorm:"type:time;<-:create;not null"`
-	UpdatedAt time.Time `gorm:"type:time;<-:update"`
 }
 
 // データベースを自動的にマイグレーションする
