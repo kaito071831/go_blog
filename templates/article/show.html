@@ -5,6 +5,7 @@
   <p>{{ .Body }}</p>
   <p>{{ .CreatedAt }}</p>
   <p>{{ .UpdatedAt }}</p>
+  <a href="/article/{{ .ID }}/edit">編集する</a><br/>
   <a href="/article">一覧に戻る</a>
 </html>
 {{ end }}
