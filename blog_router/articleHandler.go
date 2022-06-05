@@ -72,3 +72,12 @@ func Update(c *gin.Context) {
 	utility.Db.Model(&article).Updates(Article{Title: c.PostForm("title"), Body: c.PostForm("body")})
 	c.Redirect(http.StatusSeeOther, "/article/" + id)
 }
+
+// 記事を削除する
+func Destroy(c *gin.Context) {
+	atricle := Article{}
+	id := c.Param("id")
+	utility.Db.First(&atricle, id)
+	utility.Db.Delete(&atricle)
+	c.Redirect(http.StatusSeeOther, "/article")
+}

@@ -6,6 +6,7 @@
   <p>{{ .CreatedAt }}</p>
   <p>{{ .UpdatedAt }}</p>
   <a href="/article/{{ .ID }}/edit">編集する</a><br/>
+  <a href="/article/{{ .ID }}/delete" onclick="return confirm('この記事を削除してもよろしいですか？')">削除する</a><br/>
   <a href="/article">一覧に戻る</a>
 </html>
 {{ end }}
