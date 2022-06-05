@@ -60,3 +60,11 @@ func Edit(c *gin.Context) {
 	utility.Db.First(&article, id)
 	c.HTML(http.StatusOK, "article/edit.html", article)
 }
+
+// 記事を更新する
+func Update(c *gin.Context) {
+	if err := c.Request.ParseForm(); err != nil {
+		log.Fatalf("フォームの送信に失敗しました: %v", err)
+	}
+
+}

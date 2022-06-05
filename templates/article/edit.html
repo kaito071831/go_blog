@@ -1,0 +1,10 @@
+{{ define "article/edit.html" }}
+<html>
+  <h1>記事編集</h1>
+  <form method="put" action="/article/:id/">
+    <label>Title</label><br/><input type="text" name="title" value="{{ .Title }}"><br/>
+    <label>Body</label><br/><textarea name="body">{{ .Body }}</textarea>
+    <input type="submit" value="送信"/>
+  </form>
+</html>
+{{ end }}
