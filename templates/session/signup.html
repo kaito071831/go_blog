@@ -1,0 +1,11 @@
+{{ define "session/signup.html" }}
+<html>
+  <p>{{ .err }}</p>
+  <h1>新規登録</h1>
+  <form action="/signup" method="post">
+    <p>ユーザー名：<input type="text" name="username" placeholder=""/></p>
+    <p>パスワード：<input type="text" name="password" placeholder=""/></p>
+    <p><input type="submit" value="登録"/></p>
+  </form>
+</html>
+{{ end }}
