@@ -21,6 +21,10 @@ func main() {
 
 	// URIとハンドラを指定
 	router.GET("/", blog_router.TopHandler)
+	router.GET("/signup", blog_router.Signup)
+	router.POST("/signup", blog_router.Signup)
+	router.GET("/login", blog_router.Login)
+	router.POST("/login", blog_router.Login)
 
 	article_group := router.Group("/article")
 	article_group.GET("/", blog_router.Index)
