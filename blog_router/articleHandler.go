@@ -43,7 +43,11 @@ func Show(c *gin.Context) {
 		article := Article{}
 		id := c.Param("id")
 		utility.Db.First(&article, id)
-		c.HTML(http.StatusOK, "article/show.html", article)
+		if article.UserID != getUser(sessions.Default(c).Get(userKey).(string)).ID {
+			c.HTML(http.StatusNotFound, "errors/404.html", nil)
+		} else {
+			c.HTML(http.StatusOK, "article/show.html", article)
+		}
 	}
 }
 
