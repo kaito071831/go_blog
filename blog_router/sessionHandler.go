@@ -19,7 +19,7 @@ type User struct {
 }
 
 // セッションでユーザー名を保存しているキー
-const userKey string = "UserID" 
+const userKey string = "UserID"
 
 func init() {
 	utility.Db.Set("gorm:table_options", "ENGINE = InnoDB").AutoMigrate(&User{})
@@ -39,15 +39,22 @@ func compareHashAndPassword(hash, password string) error {
 // ユーザーを作成する
 func createUser(username string, password string) error {
 	passwordEncrypt, _ := passwordEncrypt(password)
-	if err := utility.Db.Create(&User{Username: username, Password: passwordEncrypt}).Error; err != nil{
+	if err := utility.Db.Create(&User{Username: username, Password: passwordEncrypt}).Error; err != nil {
 		return err
 	}
 	return nil
 }
 
+// ユーザーを取得する
+func getUser(username string) User {
+	var user User
+	utility.Db.First(&user, "username = ?", username)
+	return user
+}
+
 // ユーザー新規登録
 func Signup(c *gin.Context) {
-	switch c.Request.Method{
+	switch c.Request.Method {
 	case "GET":
 		c.HTML(http.StatusOK, "session/signup.html", nil)
 	case "POST":
@@ -58,7 +65,7 @@ func Signup(c *gin.Context) {
 		} else {
 			username := c.PostForm("username")
 			password := c.PostForm("password")
-			
+
 			// ユーザーが重複したときのエラー処理
 			if err := createUser(username, password); err != nil {
 				c.HTML(http.StatusBadRequest, "session/signup.html", err)
@@ -71,16 +78,9 @@ func Signup(c *gin.Context) {
 	}
 }
 
-// ユーザーを取得する
-func getUser(username string) User {
-	var user User
-	utility.Db.First(&user, "username = ?", username)
-	return user
-}
-
 // ユーザーログイン
 func Login(c *gin.Context) {
-	switch c.Request.Method{
+	switch c.Request.Method {
 	case "GET":
 		c.HTML(http.StatusOK, "session/login.html", nil)
 	case "POST":
