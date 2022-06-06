@@ -4,6 +4,7 @@
   <form method="post" action="/article">
     <label>Title</label><br/><input type="text" name="title"><br/>
     <label>Body</label><br/><textarea name="body"></textarea>
+    <input type="hidden" name="userid" value="{{ .ID }}">
     <input type="submit" value="送信"/>
   </form>
 </html>
