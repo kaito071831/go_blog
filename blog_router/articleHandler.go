@@ -18,20 +18,21 @@ type Article struct {
 }
 
 // データベースを自動的にマイグレーションする
-func init(){
+func init() {
 	utility.Db.Set("gorm:table_options", "ENGINE = InnoDB").AutoMigrate(&Article{})
 }
 
 // 記事の一覧を表示
 func Index(c *gin.Context) {
-	session := sessions.Default(c)
-	username := session.Get("UserID")
-	articlelist := []Article{}
-	utility.Db.Find(&articlelist)
-	c.HTML(http.StatusOK, "article/index.html", gin.H{
-		"articlelist": articlelist,
-		"username": username,
-	})
+	if isLogin(c) {
+		username := sessions.Default(c).Get(userKey)
+		articlelist := []Article{}
+		utility.Db.Find(&articlelist)
+		c.HTML(http.StatusOK, "article/index.html", gin.H{
+			"articlelist": articlelist,
+			"username": username,
+		})
+	}
 }
 
 // 記事の詳細表示
