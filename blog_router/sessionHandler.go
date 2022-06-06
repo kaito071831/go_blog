@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/kaito071831/go_blog/utility"
 	"golang.org/x/crypto/bcrypt"
@@ -16,6 +17,9 @@ type User struct {
 	Username string `form:"username" binding:"required" gorm:"unique;not null"`
 	Password string `form:"password" binding:"required"`
 }
+
+// セッションでユーザー名を保存しているキー
+const userKey string = "UserID" 
 
 func init() {
 	utility.Db.Set("gorm:table_options", "ENGINE = InnoDB").AutoMigrate(&User{})
@@ -74,16 +78,22 @@ func getUser(username string) User {
 	return user
 }
 
+// ユーザーログイン
 func Login(c *gin.Context) {
 	switch c.Request.Method{
 	case "GET":
 		c.HTML(http.StatusOK, "session/login.html", nil)
 	case "POST":
+
+		user := getUser(c.PostForm("username"))
+
 		// DBに登録されているハッシュ化されたパスワードを取得する
-		dbPassword := getUser(c.PostForm("username")).Password
+		dbPassword := user.Password
 
 		// フォームから取得したパスワード
 		formPassword := c.PostForm("password")
+
+		session := sessions.Default(c)
 
 		// ユーザーパスワードの比較
 		if err := compareHashAndPassword(dbPassword, formPassword); err != nil {
@@ -91,10 +101,27 @@ func Login(c *gin.Context) {
 			c.HTML(http.StatusOK, "session/login.html", err)
 			c.Abort()
 		} else {
+			session.Set(userKey, user.Username)
+			if err := session.Save(); err != nil {
+				log.Println("セッションの保存に失敗しました")
+				c.HTML(http.StatusOK, "session/login.html", err)
+				c.Abort()
+			}
 			log.Println("ログインできました")
-			c.Redirect(http.StatusFound, "/")
+			c.Redirect(http.StatusSeeOther, "/article")
 		}
 	default:
 		c.HTML(http.StatusOK, "session/login.html", nil)
 	}
+}
+
+// ユーザーログアウト
+func Logout(c *gin.Context) {
+	session := sessions.Default(c)
+	session.Delete(userKey)
+	if err := session.Save(); err != nil {
+		log.Printf("ログアウトに失敗しました: %v", err)
+		return
+	}
+	c.Redirect(http.StatusSeeOther, "/")
 }

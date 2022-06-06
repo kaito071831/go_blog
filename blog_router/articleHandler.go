@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/kaito071831/go_blog/utility"
 	"gorm.io/gorm"
@@ -23,9 +24,14 @@ func init(){
 
 // 記事の一覧を表示
 func Index(c *gin.Context) {
+	session := sessions.Default(c)
+	username := session.Get("UserID")
 	articlelist := []Article{}
 	utility.Db.Find(&articlelist)
-	c.HTML(http.StatusOK, "article/index.html", articlelist)
+	c.HTML(http.StatusOK, "article/index.html", gin.H{
+		"articlelist": articlelist,
+		"username": username,
+	})
 }
 
 // 記事の詳細表示

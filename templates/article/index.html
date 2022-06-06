@@ -1,8 +1,10 @@
 {{ define "article/index.html" }}
 <html>
   <h1>記事一覧</h1>
+  <p>ユーザー名:{{ .username }}</p>
+  <p><a href="/logout">ログアウト</a></p>
   <ul>
-    {{ range . }}
+    {{ range .articlelist }}
       <li><a href="/article/{{ .ID }}">{{ .Title }}</a></li>
     {{ end }}
   </ul>

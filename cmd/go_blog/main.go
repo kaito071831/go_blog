@@ -3,15 +3,20 @@ package main
 import (
 	"log"
 
+	"github.com/gin-contrib/sessions"
+	gormsessions "github.com/gin-contrib/sessions/gorm"
 	"github.com/gin-gonic/gin"
 	"github.com/kaito071831/go_blog/blog_router"
+	"github.com/kaito071831/go_blog/utility"
 )
-
-
 
 func main() {
 	// ルータを作成
 	router := gin.Default()
+
+	// クッキーストアを生成する
+	store := gormsessions.NewStore(utility.Db, true, []byte("secret"))
+	router.Use(sessions.Sessions("mysession", store))
 
 	// htmlのディレクトリを指定
 	router.LoadHTMLGlob("templates/**/*")
@@ -25,6 +30,7 @@ func main() {
 	router.POST("/signup", blog_router.Signup)
 	router.GET("/login", blog_router.Login)
 	router.POST("/login", blog_router.Login)
+	router.GET("/logout", blog_router.Logout)
 
 	article_group := router.Group("/article")
 	article_group.GET("/", blog_router.Index)
