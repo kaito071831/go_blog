@@ -52,6 +52,17 @@ func getUser(username string) User {
 	return user
 }
 
+// ログインしているか確認する
+func isLogin(c *gin.Context) bool {
+	session := sessions.Default(c)
+	username := session.Get(userKey)
+	if username == nil {
+		c.Redirect(http.StatusSeeOther, "/login")
+		return false
+	}
+	return true
+}
+
 // ユーザー新規登録
 func Signup(c *gin.Context) {
 	switch c.Request.Method {
