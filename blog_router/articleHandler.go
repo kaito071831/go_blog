@@ -67,7 +67,6 @@ func Create(c *gin.Context) {
 	article := Article{Title: c.PostForm("title"), Body: c.PostForm("body"), UserID: uint(userid)}
 	utility.Db.Create(&article)
 	c.Redirect(http.StatusSeeOther, "/article")
-
 }
 
 // 記事編集フォームを表示
