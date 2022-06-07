@@ -100,38 +100,42 @@ func Signup(c *gin.Context) {
 
 // ユーザーログイン
 func Login(c *gin.Context) {
-	switch c.Request.Method {
-	case "GET":
-		c.HTML(http.StatusOK, "session/login.html", nil)
-	case "POST":
+	if isLogin(c) {
+		c.Redirect(http.StatusSeeOther, "/article")
+	} else {
+		switch c.Request.Method {
+		case "GET":
+			c.HTML(http.StatusOK, "session/login.html", nil)
+		case "POST":
 
-		user := getUser(c.PostForm("username"))
+			user := getUser(c.PostForm("username"))
 
-		// DBに登録されているハッシュ化されたパスワードを取得する
-		dbPassword := user.Password
+			// DBに登録されているハッシュ化されたパスワードを取得する
+			dbPassword := user.Password
 
-		// フォームから取得したパスワード
-		formPassword := c.PostForm("password")
+			// フォームから取得したパスワード
+			formPassword := c.PostForm("password")
 
-		session := sessions.Default(c)
+			session := sessions.Default(c)
 
-		// ユーザーパスワードの比較
-		if err := compareHashAndPassword(dbPassword, formPassword); err != nil {
-			log.Println("ログインできませんでした")
-			c.HTML(http.StatusOK, "session/login.html", err)
-			c.Abort()
-		} else {
-			session.Set(userKey, user.Username)
-			if err := session.Save(); err != nil {
-				log.Println("セッションの保存に失敗しました")
+			// ユーザーパスワードの比較
+			if err := compareHashAndPassword(dbPassword, formPassword); err != nil {
+				log.Println("ログインできませんでした")
 				c.HTML(http.StatusOK, "session/login.html", err)
 				c.Abort()
+			} else {
+				session.Set(userKey, user.Username)
+				if err := session.Save(); err != nil {
+					log.Println("セッションの保存に失敗しました")
+					c.HTML(http.StatusOK, "session/login.html", err)
+					c.Abort()
+				}
+				log.Println("ログインできました")
+				c.Redirect(http.StatusSeeOther, "/article")
 			}
-			log.Println("ログインできました")
-			c.Redirect(http.StatusSeeOther, "/article")
+		default:
+			c.HTML(http.StatusOK, "session/login.html", nil)
 		}
-	default:
-		c.HTML(http.StatusOK, "session/login.html", nil)
 	}
 }
 
