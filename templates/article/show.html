@@ -1,5 +1,5 @@
 {{ define "article/show.html" }}
-<html>
+  {{ template "header" }}
   <h1>記事詳細</h1>
   <p>{{ .Title }}</p>
   <p>{{ .Body }}</p>
@@ -8,5 +8,5 @@
   <a href="/article/{{ .ID }}/edit">編集する</a><br/>
   <a href="/article/{{ .ID }}/delete" onclick="return confirm('この記事を削除してもよろしいですか？')">削除する</a><br/>
   <a href="/article">一覧に戻る</a>
-</html>
+  {{ template "footer" }}
 {{ end }}

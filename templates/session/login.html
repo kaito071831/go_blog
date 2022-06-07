@@ -1,5 +1,5 @@
 {{ define "session/login.html" }}
-<html>
+  {{ template "header" }}
   {{ .err }}
   <h1>ログイン</h1>
   <form action="/login" method="post">
@@ -7,5 +7,5 @@
     <p>パスワード：<input type="password" name="password" placeholder=""/></p>
     <p><input type="submit" value="ログイン"/></p>
   </form>
-</html>
+  {{ template "footer"}}
 {{ end }}

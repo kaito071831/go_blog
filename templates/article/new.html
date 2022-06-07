@@ -1,5 +1,5 @@
 {{ define "article/new.html" }}
-<html>
+  {{ template "header" }}
   <h1>記事作成</h1>
   <form method="post" action="/article">
     <label>Title</label><br/><input type="text" name="title"><br/>
@@ -7,5 +7,5 @@
     <input type="hidden" name="userid" value="{{ .ID }}">
     <input type="submit" value="送信"/>
   </form>
-</html>
+  {{ template "footer" }}
 {{ end }}

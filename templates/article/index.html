@@ -1,5 +1,5 @@
 {{ define "article/index.html" }}
-<html>
+  {{ template "header" }}
   <h1>記事一覧</h1>
   <p>ユーザー名:{{ .username }}</p>
   <p><a href="/logout">ログアウト</a></p>
@@ -9,5 +9,5 @@
     {{ end }}
   </ul>
   <a href="/article/new">記事作成</a>
-</html>
+  {{ template "footer" }}
 {{ end }}

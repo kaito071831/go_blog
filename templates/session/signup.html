@@ -1,5 +1,5 @@
 {{ define "session/signup.html" }}
-<html>
+  {{ template "header"}}
   <p>{{ .err }}</p>
   <h1>新規登録</h1>
   <form action="/signup" method="post">
@@ -7,5 +7,5 @@
     <p>パスワード：<input type="password" name="password" placeholder=""/></p>
     <p><input type="submit" value="登録"/></p>
   </form>
-</html>
+  {{ template "footer" }}
 {{ end }}

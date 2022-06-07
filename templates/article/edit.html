@@ -1,10 +1,10 @@
 {{ define "article/edit.html" }}
-<html>
+  {{ template "header" }}
   <h1>記事編集</h1>
   <form method="post" action="/article/{{ .ID }}">
     <label>Title</label><br/><input type="text" name="title" value="{{ .Title }}"><br/>
     <label>Body</label><br/><textarea name="body">{{ .Body }}</textarea><br/>
     <input type="submit" value="送信"/>
   </form>
-</html>
+  {{ template "footer"}}
 {{ end }}
