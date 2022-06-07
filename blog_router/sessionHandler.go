@@ -57,10 +57,18 @@ func getUser(username string) User {
 func isLogin(c *gin.Context) bool {
 	username := sessions.Default(c).Get(userKey)
 	if username == nil {
-		c.Redirect(http.StatusSeeOther, "/login")
 		return false
 	}
 	return true
+}
+
+// ユーザー認証を行う
+func authenticatedUser(c *gin.Context) {
+	if isLogin(c){
+		return
+	}
+	c.Redirect(http.StatusSeeOther, "/login")
+	return
 }
 
 // ユーザー新規登録
