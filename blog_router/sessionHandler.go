@@ -22,6 +22,7 @@ type User struct {
 // セッションでユーザー名を保存しているキー
 const userKey string = "UserID"
 
+// データベースの自動設定
 func init() {
 	utility.Db.Set("gorm:table_options", "ENGINE = InnoDB").AutoMigrate(&User{})
 }
