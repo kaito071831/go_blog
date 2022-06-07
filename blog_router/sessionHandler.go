@@ -64,12 +64,12 @@ func isLogin(c *gin.Context) bool {
 }
 
 // ユーザー認証を行う
-func authenticatedUser(c *gin.Context) {
-	if isLogin(c){
-		return
+func authenticatedUser(c *gin.Context) bool {
+	if isLogin(c) {
+		return true
 	}
 	c.Redirect(http.StatusSeeOther, "/login")
-	return
+	return false
 }
 
 // ユーザー新規登録
