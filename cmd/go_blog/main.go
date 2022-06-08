@@ -2,7 +2,7 @@ package main
 
 import (
 	"log"
-
+	"net/http"
 	"github.com/gin-contrib/sessions"
 	gormsessions "github.com/gin-contrib/sessions/gorm"
 	"github.com/gin-gonic/gin"
@@ -40,6 +40,13 @@ func main() {
 	article_group.GET("/:id/edit", blog_router.Edit)
 	article_group.POST("/:id", blog_router.Update)
 	article_group.GET("/:id/delete", blog_router.Destroy)
+
+	router.NoRoute(func(c *gin.Context) {
+		title := "404 Notfound"
+		c.HTML(http.StatusNotFound, "errors/404.html", gin.H{
+			"title": title,
+		})
+	})
 
 	// サーバーを起動
 	if err := router.Run(); err != nil {
