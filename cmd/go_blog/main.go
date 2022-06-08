@@ -10,6 +10,18 @@ import (
 	"github.com/kaito071831/go_blog/utility"
 )
 
+// ユーザー認証を行う
+func authenticatedUser() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		if blog_router.IsLogin(c) {
+			c.Next()
+		} else {
+			c.Redirect(http.StatusSeeOther, "/login")
+			c.Abort()
+		}
+	}
+}
+
 func main() {
 	// ルータを作成
 	router := gin.Default()
@@ -33,6 +45,7 @@ func main() {
 	router.GET("/logout", blog_router.Logout)
 
 	article_group := router.Group("/article")
+	article_group.Use(authenticatedUser())
 	article_group.GET("/", blog_router.Index)
 	article_group.GET("/new", blog_router.New)
 	article_group.POST("/", blog_router.Create)
