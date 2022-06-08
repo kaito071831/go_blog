@@ -3,8 +3,8 @@
   <h1>記事詳細</h1>
   <p>{{ .atricle.Title }}</p>
   <p>{{ .article.Body }}</p>
-  <p>{{ .article.CreatedAt }}</p>
-  <p>{{ .article.UpdatedAt }}</p>
+  <p>{{ TimeFormat .article.CreatedAt }}</p>
+  <p>{{ TimeFormat .article.UpdatedAt }}</p>
   <a href="/article/{{ .article.ID }}/edit">編集する</a><br/>
   <a href="/article/{{ .article.ID }}/delete" onclick="return confirm('この記事を削除してもよろしいですか？')">削除する</a><br/>
   <a href="/article">一覧に戻る</a>

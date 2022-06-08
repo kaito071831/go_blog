@@ -1,8 +1,10 @@
 package main
 
 import (
+	"html/template"
 	"log"
 	"net/http"
+
 	"github.com/gin-contrib/sessions"
 	gormsessions "github.com/gin-contrib/sessions/gorm"
 	"github.com/gin-gonic/gin"
@@ -17,6 +19,10 @@ func main() {
 	// クッキーストアを生成する
 	store := gormsessions.NewStore(utility.Db, true, []byte("secret"))
 	router.Use(sessions.Sessions("mysession", store))
+
+	router.SetFuncMap(template.FuncMap{
+		"TimeFormat": utility.TimeFormat,
+	})
 
 	// htmlのディレクトリを指定
 	router.LoadHTMLGlob("templates/**/*")
