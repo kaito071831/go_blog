@@ -3,7 +3,7 @@
   <h1>記事編集</h1>
   <form method="post" action="/article/{{ .article.ID }}">
     <label>Title</label><br/><input type="text" name="title" value="{{ .article.Title }}"><br/>
-    <label>Body</label><br/><textarea name="body">{{ .article.Body }}</textarea><br/>
+    <label>Body<br/><textarea name="body">{{ .article.Body }}</textarea></label><br/>
     <input type="submit" value="送信"/>
   </form>
   <a href="/article/{{ .article.ID }}">戻る</a>
