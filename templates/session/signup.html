@@ -1,5 +1,5 @@
 {{ define "session/signup.html" }}
-  {{ template "header"}}
+  {{ template "header" .}}
   <p>{{ .err }}</p>
   <h1>新規登録</h1>
   <form action="/signup" method="post">

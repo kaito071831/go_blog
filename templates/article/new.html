@@ -1,11 +1,12 @@
 {{ define "article/new.html" }}
-  {{ template "header" }}
+  {{ template "header" .}}
   <h1>記事作成</h1>
   <form method="post" action="/article">
     <label>Title</label><br/><input type="text" name="title"><br/>
     <label>Body</label><br/><textarea name="body"></textarea>
-    <input type="hidden" name="userid" value="{{ .ID }}">
+    <input type="hidden" name="userid" value="{{ .user.ID }}">
     <input type="submit" value="送信"/>
   </form>
+  <a href="/article">戻る</a>
   {{ template "footer" }}
 {{ end }}

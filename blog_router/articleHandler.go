@@ -1,6 +1,7 @@
 package blog_router
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"strconv"
@@ -33,6 +34,7 @@ func Index(c *gin.Context) {
 		c.HTML(http.StatusOK, "article/index.html", gin.H{
 			"articlelist": articlelist,
 			"username": username,
+			"title": "記事一覧",
 		})
 	}
 }
@@ -46,7 +48,12 @@ func Show(c *gin.Context) {
 		if article.UserID != getUser(sessions.Default(c).Get(userKey).(string)).ID {
 			c.HTML(http.StatusNotFound, "errors/404.html", nil)
 		} else {
-			c.HTML(http.StatusOK, "article/show.html", article)
+			article.CreatedAt = utility.ConvertJST(article.CreatedAt)
+			article.UpdatedAt = utility.ConvertJST(article.UpdatedAt)
+			c.HTML(http.StatusOK, "article/show.html", gin.H{
+				"article": article,
+				"title": fmt.Sprintf("%s | 記事詳細", article.Title), 
+			})
 		}
 	}
 }
@@ -56,7 +63,10 @@ func New(c *gin.Context) {
 	if authenticatedUser(c) {
 		username := sessions.Default(c).Get(userKey)
 		user := getUser(username.(string))
-		c.HTML(http.StatusOK, "article/new.html", user)
+		c.HTML(http.StatusOK, "article/new.html", gin.H{
+			"user": user,
+			"title": "記事作成",
+		})
 	}
 }
 
@@ -79,7 +89,10 @@ func Edit(c *gin.Context) {
 		article := Article{}
 		id := c.Param("id")
 		utility.Db.First(&article, id)
-		c.HTML(http.StatusOK, "article/edit.html", article)
+		c.HTML(http.StatusOK, "article/edit.html", gin.H{
+			"article": article,
+			"title": "記事編集",
+		})
 	}
 }
 
@@ -93,7 +106,7 @@ func Update(c *gin.Context) {
 		id := c.Param("id")
 		utility.Db.First(&article, id)
 		utility.Db.Model(&article).Updates(Article{Title: c.PostForm("title"), Body: c.PostForm("body")})
-		c.Redirect(http.StatusSeeOther, "/article/" + id)
+		c.Redirect(http.StatusSeeOther, fmt.Sprintf("/article/%s", id))
 	}
 }
 

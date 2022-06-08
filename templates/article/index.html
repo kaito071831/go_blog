@@ -1,5 +1,5 @@
 {{ define "article/index.html" }}
-  {{ template "header" }}
+  {{ template "header" .}}
   <h1>記事一覧</h1>
   <p>ユーザー名:{{ .username }}</p>
   <p><a href="/logout">ログアウト</a></p>

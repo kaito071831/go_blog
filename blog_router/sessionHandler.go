@@ -22,6 +22,9 @@ type User struct {
 // セッションでユーザー名を保存しているキー
 const userKey string = "UserID"
 
+// タイトルタグの文字列
+var title string = ""
+
 // データベースの自動設定
 func init() {
 	utility.Db.Set("gorm:table_options", "ENGINE = InnoDB").AutoMigrate(&User{})
@@ -74,13 +77,19 @@ func authenticatedUser(c *gin.Context) bool {
 
 // ユーザー新規登録
 func Signup(c *gin.Context) {
+	title = "新規登録"
 	switch c.Request.Method {
 	case "GET":
-		c.HTML(http.StatusOK, "session/signup.html", nil)
+		c.HTML(http.StatusOK, "session/signup.html", gin.H{
+			"title": title,
+		})
 	case "POST":
 		var form User
 		if err := c.Bind(&form); err != nil {
-			c.HTML(http.StatusBadRequest, "session/signup.html", err)
+			c.HTML(http.StatusBadRequest, "session/signup.html", gin.H{
+				"err": err,
+				"title": title,
+			})
 			c.Abort()
 		} else {
 			username := c.PostForm("username")
@@ -88,26 +97,33 @@ func Signup(c *gin.Context) {
 
 			// ユーザーが重複したときのエラー処理
 			if err := createUser(username, password); err != nil {
-				c.HTML(http.StatusBadRequest, "session/signup.html", err)
+				c.HTML(http.StatusBadRequest, "session/signup.html", gin.H{
+					"err": err,
+					"title": title,
+				})
 				c.Abort()
 			}
 			c.Redirect(http.StatusFound, "/")
 		}
 	default:
-		c.HTML(http.StatusOK, "session/signup.html", nil)
+		c.HTML(http.StatusOK, "session/signup.html", gin.H{
+			"title": title,
+		})
 	}
 }
 
 // ユーザーログイン
 func Login(c *gin.Context) {
+	title ="ログイン"
 	if isLogin(c) {
 		c.Redirect(http.StatusSeeOther, "/article")
 	} else {
 		switch c.Request.Method {
 		case "GET":
-			c.HTML(http.StatusOK, "session/login.html", nil)
+			c.HTML(http.StatusOK, "session/login.html", gin.H{
+				"title": title,
+			})
 		case "POST":
-
 			user := getUser(c.PostForm("username"))
 
 			// DBに登録されているハッシュ化されたパスワードを取得する
@@ -121,20 +137,28 @@ func Login(c *gin.Context) {
 			// ユーザーパスワードの比較
 			if err := compareHashAndPassword(dbPassword, formPassword); err != nil {
 				log.Println("ログインできませんでした")
-				c.HTML(http.StatusOK, "session/login.html", err)
+				c.HTML(http.StatusOK, "session/login.html", gin.H{
+					"err": err,
+					"title": title,
+				})
 				c.Abort()
 			} else {
 				session.Set(userKey, user.Username)
 				if err := session.Save(); err != nil {
 					log.Println("セッションの保存に失敗しました")
-					c.HTML(http.StatusOK, "session/login.html", err)
+					c.HTML(http.StatusOK, "session/login.html", gin.H{
+						"err": err,
+						"title": title,
+					})
 					c.Abort()
 				}
 				log.Println("ログインできました")
 				c.Redirect(http.StatusSeeOther, "/article")
 			}
 		default:
-			c.HTML(http.StatusOK, "session/login.html", nil)
+			c.HTML(http.StatusOK, "session/login.html", gin.H{
+				"title": title,
+			})
 		}
 	}
 }
