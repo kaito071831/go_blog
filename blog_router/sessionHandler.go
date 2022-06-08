@@ -66,6 +66,18 @@ func IsLogin(c *gin.Context) bool {
 	return true
 }
 
+// ユーザー認証を行う
+func AuthenticatedUser() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		if IsLogin(c) {
+			c.Next()
+		} else {
+			c.Redirect(http.StatusSeeOther, "/login")
+			c.Abort()
+		}
+	}
+}
+
 // ユーザー新規登録
 func Signup(c *gin.Context) {
 	title = "新規登録"
